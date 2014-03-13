@@ -1,0 +1,20 @@
+---
+  - name: install ruby from apt
+    apt: pkg={{ item }} state=present
+    with_items:
+      - ruby{{ ruby_version }}
+      - ruby{{ ruby_version }}-dev
+      - build-essential
+
+  - name: install bundler
+    gem: name=bundler state=present
+    remote_user: vagrant
+    sudo: no
+
+  - name: gems bins to path
+    lineinfile: dest=/home/vagrant/.bashrc line="export PATH=$PATH:/home/vagrant/.gem/ruby/{{ ruby_version }}/bin" state=present
+
+  - name: setup bundle directory
+    file: dest=/var/lib/gems state=directory owner=vagrant group=vagrant
+
+ 
